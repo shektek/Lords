@@ -67,9 +67,12 @@
   <ItemGroup>
     <ClCompile Include="src\AppManager.cpp" />
     <ClCompile Include="src\GameMaster.cpp" />
+    <ClCompile Include="src\GUISheetManager.cpp" />
     <ClCompile Include="src\GUIStateMachine.cpp" />
     <ClCompile Include="src\Level.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MainMenuGUISheet.cpp" />
+    <ClCompile Include="src\NewGameGUISheet.cpp" />
     <ClCompile Include="src\PeasantFactory.cpp" />
     <ClCompile Include="src\Resource.cpp" />
     <ClCompile Include="src\ResourceFactory.cpp" />
@@ -81,11 +84,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AppManager.h" />
+    <ClInclude Include="src\CoolStuff.h" />
     <ClInclude Include="src\GameMaster.h" />
     <ClInclude Include="src\GUIMenu.h" />
+    <ClInclude Include="src\AbstractGUISheet.h" />
+    <ClInclude Include="src\GUISheetManager.h" />
     <ClInclude Include="src\GUIStateMachine.h" />
+    <ClInclude Include="src\GUIStates.h" />
     <ClInclude Include="src\IdGenerator.h" />
     <ClInclude Include="src\Level.h" />
+    <ClInclude Include="src\MainMenuGUISheet.h" />
+    <ClInclude Include="src\NewGameGUISheet.h" />
     <ClInclude Include="src\Peasant.h" />
     <ClInclude Include="src\PeasantFactory.h" />
     <ClInclude Include="src\Player.h" />

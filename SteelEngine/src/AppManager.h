@@ -5,11 +5,13 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "CoolStuff.h"
 //engine
 #include "irrlicht.h"
 #include "btBulletDynamicsCommon.h"
 #include "GUIStateMachine.h"
 #include "GUIMenu.h"
+#include "GUISheetManager.h"
 //game
 #include "GameMaster.h"
 
@@ -87,8 +89,6 @@ private:
 	irr::ILogger* logger;
 };
 
-typedef irr::core::rect<irr::s32> QuickRect;
-
 class AppManager : public irr::IEventReceiver
 {
 	protected:
@@ -122,6 +122,7 @@ class AppManager : public irr::IEventReceiver
 
 		//Steel-specific objects
 		Steel::GUIStateMachine*	m_GUIState;
+		Steel::GUISheetManager* m_GUISheetManager;
 		Steel::GameMaster*		m_gameMaster;
 
 		//resources

@@ -32,6 +32,8 @@ namespace Steel
 
 			bool				SetCurrentLevel(const std::string &levelFilename);
 			Level				*GetCurrentLevel() { return currentLevel; }
+			Level				*GetLevelAtIndex(const int i) { if (i >= 0 && i < GetLevelCount()) return levels[i]; else return nullptr; }
+			int					GetLevelCount() const { return levels.size(); }
 
 			bool				AddLevel(const std::string &levelFilename);
 			bool				NextLevel();

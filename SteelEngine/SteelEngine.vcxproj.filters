@@ -28,6 +28,12 @@
     <Filter Include="Header Files\Misc">
       <UniqueIdentifier>{29d8c298-723c-4c83-a57b-260c4ddbe412}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GUI\Sheets">
+      <UniqueIdentifier>{9f8775ab-1f59-43bc-b87d-c63d41011b4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GUI\Sheets">
+      <UniqueIdentifier>{297565fd-2335-42dc-8563-cdb77115221d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -68,6 +74,15 @@
     </ClCompile>
     <ClCompile Include="src\Level.cpp">
       <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainMenuGUISheet.cpp">
+      <Filter>Source Files\GUI\Sheets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUISheetManager.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NewGameGUISheet.cpp">
+      <Filter>Source Files\GUI\Sheets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +136,24 @@
     </ClInclude>
     <ClInclude Include="src\Level.h">
       <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AbstractGUISheet.h">
+      <Filter>Header Files\GUI\Sheets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainMenuGUISheet.h">
+      <Filter>Header Files\GUI\Sheets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GUISheetManager.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GUIStates.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NewGameGUISheet.h">
+      <Filter>Header Files\GUI\Sheets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CoolStuff.h">
+      <Filter>Header Files\Misc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

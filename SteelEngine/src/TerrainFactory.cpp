@@ -19,7 +19,7 @@ namespace Steel
 		unsigned int width;
 		unsigned int height;
 		unsigned int scale;
-		unsigned char *data;	//comes from a corresponding filename.bmp
+		unsigned char *data = nullptr;	//comes from a corresponding filename.bmp
 		std::string hmname;
 		std::string diffname;
 		std::string detname;

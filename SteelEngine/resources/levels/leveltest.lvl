@@ -1,5 +1,6 @@
 //the map to use
 terrain=resources/levels/terraintest.ter
+levelname=Test Scenario
 
 //territory number and name followed by a set of normalised points for drawing boundary lines
 territorydeclare=0, Luke1, {
