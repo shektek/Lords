@@ -96,8 +96,8 @@ bool AppManager::InitIrrlicht()
 		irrGUI->getSkin()->setFont(irrGUI->getFont("resources/fonts/cormorant_large.png"));
 		m_textures["logo"] = irrDriver->getTexture("resources/textures/logo.png");
 		m_textures["newgame"] = irrDriver->getTexture("resources/textures/newgame.png");
-		m_cameras["default"] = irrScene->addCameraSceneNodeFPS();
-		m_cameras["gui"] = irrScene->addCameraSceneNode();
+		//m_cameras["default"] = irrScene->addCameraSceneNodeFPS();
+		m_cameras["default"] = irrScene->addCameraSceneNode();
 
 		m_summerTint = irr::video::SColor(64, 255, 240, 215);
 		m_autumnTint = irr::video::SColor(64, 255, 240, 200);
@@ -238,17 +238,20 @@ bool AppManager::Init()
 		MatchLightingToSeason(Season::S_SUMMER);
 
 		//add a detail map
-		/*if (tptr->GetDetailFilename().size() > 1)
+		if (tptr->GetDetailFilename().size() > 1)
 		{
 			m_terrains[tptr->GetName()]->setMaterialTexture(1, irrDriver->getTexture(tptr->GetDetailFilename().c_str()));
 			m_terrains[tptr->GetName()]->setMaterialType(irr::video::EMT_DETAIL_MAP);
-		}*/
+		}
 
 		m_terrains[tptr->GetName()]->scaleTexture(1.0f, 20.0f);
 
 		m_cameras["default"]->setPosition(irr::core::vector3df(-400, 1700, -400));
+		m_cameras["default"]->updateAbsolutePosition();
+		m_cameras["default"]->setTarget(irr::core::vector3df(0, 0, 0));
+		m_cameras["default"]->bindTargetAndRotation(false);
 		m_cameras["default"]->setFarValue(100000);
-		m_cameras["gui"]->setPosition(m_cameras["default"]->getPosition());
+//		m_cameras["gui"]->setPosition(m_cameras["default"]->getPosition());
 
 		//add the test terrain to the bullet world
 		m_terrains[tptr->GetName()]->updateAbsolutePosition();
@@ -311,7 +314,14 @@ void AppManager::Run()
 
 		UpdatePhysics(delta);
 
+		m_scrollBoundarySize = ((float)m_width / (float)m_height) * 75;
+		m_scrollSpeed = 1;
+		m_nonScrollBounds = irr::core::recti(0 + m_scrollBoundarySize, 0 + m_scrollBoundarySize, 
+												m_width - m_scrollBoundarySize, m_height - m_scrollBoundarySize);
+		
 		irrDriver->beginScene();
+
+		DoPassiveEvents();
 
 		//temporary territory outline drawing code
 		std::vector<Territory*> *tv = &m_gameMaster->levels[0]->territories;
@@ -357,18 +367,38 @@ void AppManager::Run()
 	}
 }
 
+void AppManager::DoPassiveEvents()
+{
+	if (m_isScrolling)
+	{
+		auto newpos = m_cameras["default"]->getPosition();
+		auto newtarget = m_cameras["default"]->getPosition();
+
+		newpos.X += m_lastScrollX;
+		newpos.Z += m_lastScrollY;
+		newtarget.X += m_lastScrollX;
+		newtarget.Z += m_lastScrollY;
+
+		m_cameras["default"]->setPosition(newpos);
+		m_cameras["default"]->updateAbsolutePosition();
+		//m_cameras["default"]->setTarget(newtarget);
+
+		printf("position:\tx=%d y=%d z=%d\n", newpos.X, newpos.Y, newpos.Z);
+		printf("target:\tx=%d y=%d z=%d\n", newtarget.X, newtarget.Y, newtarget.Z);
+	}
+}
+
 bool AppManager::OnEvent(const irr::SEvent &event)
 {
-
 	bool ret = true;
 
 	if (event.MouseInput.isLeftPressed())
 	{
-		Steel::Terrain *tptr = m_gameMaster->levels[0]->terrain;
-		int r = (rand() % 140) - 71;
-		btVector3 center(m_terrains[tptr->GetName()]->getTerrainCenter().X + r, m_terrains[tptr->GetName()]->getTerrainCenter().Y + 400, m_terrains[tptr->GetName()]->getTerrainCenter().Z + r);
+		//Steel::Terrain *tptr = m_gameMaster->levels[0]->terrain;
+		//int r = (rand() % 140) - 71;
+		//btVector3 center(m_terrains[tptr->GetName()]->getTerrainCenter().X + r, m_terrains[tptr->GetName()]->getTerrainCenter().Y + 400, m_terrains[tptr->GetName()]->getTerrainCenter().Z + r);
 
-		CreateBox(center, irr::core::vector3df(50.0, 50.0, 50.0), 10.0);
+		//CreateBox(center, irr::core::vector3df(50.0, 50.0, 50.0), 10.0);
 	}
 
 	switch(event.EventType)
@@ -380,11 +410,9 @@ bool AppManager::OnEvent(const irr::SEvent &event)
 			switch (event.KeyInput.Char)
 			{
 				case 'c':
-				if (irrScene->getActiveCamera() == m_cameras["default"])
-					irrScene->setActiveCamera(m_cameras["gui"]);
-				else
-					irrScene->setActiveCamera(m_cameras["default"]);
-				break;
+					m_cameras["default"]->setPosition(irr::core::vector3df(-400, 1700, -400));
+					m_cameras["default"]->updateAbsolutePosition();
+					//m_cameras["default"]->setTarget(irr::core::vector3df(0, 0, 0));
 				case 's':
 					m_gameMaster->PassSeason();
 					MatchLightingToSeason(m_gameMaster->GetCurrentSeason());
@@ -392,6 +420,52 @@ bool AppManager::OnEvent(const irr::SEvent &event)
 			}
 		}
 		break;
+
+		case irr::EEVENT_TYPE::EET_MOUSE_INPUT_EVENT:
+			if (event.MouseInput.X != m_lastMouseX || event.MouseInput.Y != m_lastMouseY)
+			{
+				irr::core::position2di mousepos(event.MouseInput.X, event.MouseInput.Y);
+				if (!m_nonScrollBounds.isPointInside(mousepos))
+				{
+					m_isScrolling = true;
+					irr::s32 xtranslation = 0, ztranslation = 0;
+					auto center = m_nonScrollBounds.getCenter();
+
+					if (mousepos.X < center.X)
+						xtranslation -= m_scrollSpeed;
+					else if (mousepos.X > center.X)
+						xtranslation += m_scrollSpeed;
+
+					if (mousepos.Y < center.Y)
+						ztranslation -= m_scrollSpeed;
+					else if (mousepos.Y > center.Y)
+						ztranslation += m_scrollSpeed;
+
+					auto newpos = m_cameras["default"]->getPosition();
+					auto newtarget = m_cameras["default"]->getTarget();
+					
+					m_lastScrollX = xtranslation;
+					m_lastScrollY = ztranslation;
+					
+					newpos.X += xtranslation;
+					newpos.Z += ztranslation;
+
+					newtarget.X += xtranslation;
+					newtarget.Z += ztranslation;
+
+					m_cameras["default"]->setPosition(newpos);
+					m_cameras["default"]->updateAbsolutePosition();
+					//m_cameras["default"]->setTarget(newtarget);
+				}
+				else
+				{
+					m_isScrolling = false;
+				}
+
+				m_lastMouseX = event.MouseInput.X;
+				m_lastMouseY = event.MouseInput.Y;
+			}
+			break;
 
 		case irr::EEVENT_TYPE::EET_GUI_EVENT:
 		{

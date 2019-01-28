@@ -99,6 +99,16 @@ class AppManager : public irr::IEventReceiver
 		bool				m_fullscreen;
 		std::string			m_windowName;
 
+		//input
+		irr::s32			m_lastMouseX;
+		irr::s32			m_lastMouseY;
+		irr::core::recti	m_nonScrollBounds;
+		irr::s32			m_scrollBoundarySize;
+		irr::s32			m_scrollSpeed;
+		irr::s32			m_lastScrollX;
+		irr::s32			m_lastScrollY;
+		bool				m_isScrolling;
+
 		//loop control
 		bool				m_running;
 
@@ -143,6 +153,7 @@ class AppManager : public irr::IEventReceiver
 		bool InitBullet(bool debug = false);
 
 		void MatchLightingToSeason(Season season);
+		void DoPassiveEvents();
 
 		//debug stuff
 		void CreateBox(const btVector3 &pos, const irr::core::vector3df &scale, btScalar mass);
