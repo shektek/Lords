@@ -129,11 +129,20 @@ class AppManager : public irr::IEventReceiver
 		std::map<std::string, irr::scene::ICameraSceneNode*> m_cameras;
 		std::map<std::string, irr::video::ITexture*>	m_textures;
 		std::map<std::string, irr::scene::ITerrainSceneNode*> m_terrains;	//probably only 1
+		std::map<std::string, irr::scene::ILightSceneNode *> m_lights;
+		irr::scene::ILightSceneNode *m_activeLight;
+
+		irr::video::SColor	m_summerTint;
+		irr::video::SColor	m_autumnTint;
+		irr::video::SColor	m_winterTint;
+		irr::video::SColor	m_springTint;
 
 		//private functions
 		bool InitIrrlicht();
 		bool InitGame();
 		bool InitBullet(bool debug = false);
+
+		void MatchLightingToSeason(Season season);
 
 		//debug stuff
 		void CreateBox(const btVector3 &pos, const irr::core::vector3df &scale, btScalar mass);

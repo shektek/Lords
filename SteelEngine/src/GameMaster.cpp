@@ -12,6 +12,7 @@ namespace Steel
 		resourceFactory = nullptr;
 		terrainGenerator = nullptr;
 		terrainFactory = nullptr;
+		m_currentSeason = Season::S_SUMMER;
 		levels.clear();
 	}
 
@@ -233,6 +234,22 @@ namespace Steel
 		return result;
 	}
 
+	Level *GameMaster::GetLevelByName(const std::string &name)
+	{
+		Level *result = nullptr;
+
+		for (Level *l : levels)
+		{
+			if (l->GetLevelName() == name)
+			{
+				result = l;
+				break;
+			}
+		}
+
+		return result;
+	}
+
 	bool GameMaster::NextLevel()
 	{
 		bool result = false;
@@ -261,5 +278,11 @@ namespace Steel
 		{
 			t->PassSeason();
 		}
+
+		int sindx = (int)m_currentSeason + 1;
+		if (sindx >= (int)Season::S_MAX || sindx < (int)Season::S_SUMMER)
+			sindx = 0;
+
+		m_currentSeason = (Season)sindx;
 	}
 }

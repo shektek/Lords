@@ -7,6 +7,7 @@
 #include "TerrainFactory.h"
 #include "TerrainGenerator.h"
 #include "Level.h"
+#include "Season.h"
 
 /* TODO: This needs to have a few more functions to operate the game state
  */
@@ -25,6 +26,7 @@ namespace Steel
 
 			std::vector<Level*>		levels;	//levels contain territory and terrain!
 			Level				*currentLevel;
+			Season				m_currentSeason;
 
 		public:
 			GameMaster();
@@ -33,11 +35,13 @@ namespace Steel
 			bool				SetCurrentLevel(const std::string &levelFilename);
 			Level				*GetCurrentLevel() { return currentLevel; }
 			Level				*GetLevelAtIndex(const int i) { if (i >= 0 && i < GetLevelCount()) return levels[i]; else return nullptr; }
+			Level				*GetLevelByName(const std::string &name);
 			int					GetLevelCount() const { return levels.size(); }
 
 			bool				AddLevel(const std::string &levelFilename);
 			bool				NextLevel();
 			void				PassSeason(); //pass the season for all territories
+			Season				GetCurrentSeason() const { return m_currentSeason; }
 	};
 }
 

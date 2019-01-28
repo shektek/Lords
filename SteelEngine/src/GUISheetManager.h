@@ -16,11 +16,11 @@ namespace Steel
 			GUISheetManager();
 			virtual ~GUISheetManager();
 
-			void InitSheet(GUIState state, int windowWidth, int windowHeight, GameMaster *game);
-			AbstractGUISheet *GetSheet(GUIState state);
-			void AddSheet(GUIState state, AbstractGUISheet* newSheet);
-			void RemoveSheet(GUIState state);
-			void DrawSheet(GUIState state, irr::gui::IGUIEnvironment *irrGUI);
+			void				InitSheet(GUIState state, int windowWidth, int windowHeight, GameMaster *game);
+			AbstractGUISheet	*GetSheet(GUIState state);
+			void				AddSheet(GUIState state, AbstractGUISheet* newSheet);
+			void				RemoveSheet(GUIState state);
+			void				DrawSheet(GUIState state, irr::gui::IGUIEnvironment *irrGUI);
 	};
 }
 

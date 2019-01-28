@@ -69,6 +69,7 @@
     <ClCompile Include="src\GameMaster.cpp" />
     <ClCompile Include="src\GUISheetManager.cpp" />
     <ClCompile Include="src\GUIStateMachine.cpp" />
+    <ClCompile Include="src\InGameGUISheet.cpp" />
     <ClCompile Include="src\Level.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MainMenuGUISheet.cpp" />
@@ -84,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AppManager.h" />
+    <ClInclude Include="src\CinematicGUISheet.h" />
     <ClInclude Include="src\CoolStuff.h" />
     <ClInclude Include="src\GameMaster.h" />
     <ClInclude Include="src\GUIMenu.h" />
@@ -92,14 +94,20 @@
     <ClInclude Include="src\GUIStateMachine.h" />
     <ClInclude Include="src\GUIStates.h" />
     <ClInclude Include="src\IdGenerator.h" />
+    <ClInclude Include="src\InGameGUISheet.h" />
     <ClInclude Include="src\Level.h" />
+    <ClInclude Include="src\LoadGameGUISheet.h" />
+    <ClInclude Include="src\LoadingScreenGUISheet.h" />
     <ClInclude Include="src\MainMenuGUISheet.h" />
     <ClInclude Include="src\NewGameGUISheet.h" />
+    <ClInclude Include="src\OptionsMenuGUISheet.h" />
     <ClInclude Include="src\Peasant.h" />
     <ClInclude Include="src\PeasantFactory.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Resource.h" />
     <ClInclude Include="src\ResourceFactory.h" />
+    <ClInclude Include="src\Season.h" />
+    <ClInclude Include="src\SplashScreenGUISheet.h" />
     <ClInclude Include="src\Terrain.h" />
     <ClInclude Include="src\TerrainFactory.h" />
     <ClInclude Include="src\TerrainGenerator.h" />

@@ -84,6 +84,9 @@
     <ClCompile Include="src\NewGameGUISheet.cpp">
       <Filter>Source Files\GUI\Sheets</Filter>
     </ClCompile>
+    <ClCompile Include="src\InGameGUISheet.cpp">
+      <Filter>Source Files\GUI\Sheets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AppManager.h">
@@ -154,6 +157,27 @@
     </ClInclude>
     <ClInclude Include="src\CoolStuff.h">
       <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InGameGUISheet.h">
+      <Filter>Header Files\GUI\Sheets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SplashScreenGUISheet.h">
+      <Filter>Header Files\GUI\Sheets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LoadingScreenGUISheet.h">
+      <Filter>Header Files\GUI\Sheets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OptionsMenuGUISheet.h">
+      <Filter>Header Files\GUI\Sheets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LoadGameGUISheet.h">
+      <Filter>Header Files\GUI\Sheets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CinematicGUISheet.h">
+      <Filter>Header Files\GUI\Sheets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Season.h">
+      <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

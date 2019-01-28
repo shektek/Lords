@@ -51,6 +51,8 @@ namespace Steel
 												Steel::NewGameMenuID::M_NG_GAMETAB_ID);
 		m_campaignTab = m_tabControl->addTab(L"Campaign", Steel::NewGameMenuID::M_NG_CHECKCAMPAIGN_ID);
 		m_scenarioTab = m_tabControl->addTab(L"Scenario", Steel::NewGameMenuID::M_NG_CHECKSCENARIO_ID);
+		m_campaignTabIndex = 0;
+		m_scenarioTabIndex = 0;
 
 		//campaign options
 		//display a list of available campaigns and the levels in them

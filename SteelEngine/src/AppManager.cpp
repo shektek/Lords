@@ -2,6 +2,7 @@
 #include <BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h>
 #include "MainMenuGUISheet.h"
 #include "NewGameGUISheet.h"
+#include "InGameGUISheet.h"
 
 AppManager::AppManager()
 {
@@ -42,11 +43,12 @@ AppManager::~AppManager()
 
 void AppManager::CreateBox(const btVector3 &pos, const irr::core::vector3df &scale, btScalar mass)
 {
-	irr::scene::ISceneNode *cubenode = irrScene->addCubeSceneNode(1.0f);
+	irr::scene::IMeshSceneNode *cubenode = irrScene->addCubeSceneNode(1.0f);
 	cubenode->setScale(scale);
-	cubenode->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+	cubenode->setMaterialFlag(irr::video::EMF_LIGHTING, true);
 	cubenode->setMaterialFlag(irr::video::EMF_NORMALIZE_NORMALS, true);
-	cubenode->setMaterialTexture(0, irrDriver->getTexture("resources/textures/stones.jpg"));
+	cubenode->setMaterialTexture(0, irrDriver->getTexture("resources/textures/wall.bmp"));
+	cubenode->addShadowVolumeSceneNode();
 
 	//initial transform
 	btTransform trans;
@@ -96,6 +98,16 @@ bool AppManager::InitIrrlicht()
 		m_textures["newgame"] = irrDriver->getTexture("resources/textures/newgame.png");
 		m_cameras["default"] = irrScene->addCameraSceneNodeFPS();
 		m_cameras["gui"] = irrScene->addCameraSceneNode();
+
+		m_summerTint = irr::video::SColor(64, 255, 240, 215);
+		m_autumnTint = irr::video::SColor(64, 255, 240, 200);
+		m_winterTint = irr::video::SColor(64, 230, 220, 255);
+		m_springTint = irr::video::SColor(64, 240, 255, 215);
+
+		m_lights["summer"] = irrScene->addLightSceneNode(nullptr, irr::core::vector3df(400.0, 1750, 400), m_summerTint, 5000);
+		m_lights["autumn"] = irrScene->addLightSceneNode(nullptr, irr::core::vector3df(0.0, 1250, 400), m_autumnTint, 5000);
+		m_lights["winter"] = irrScene->addLightSceneNode(nullptr, irr::core::vector3df(0.0, 1000, 0), m_winterTint, 5000);
+		m_lights["spring"] = irrScene->addLightSceneNode(nullptr, irr::core::vector3df(400.0, 1375, 0), m_springTint, 5000);
 		irrScene->setActiveCamera(m_cameras["default"]);
 
 		//done, set the event receiver
@@ -124,6 +136,7 @@ bool AppManager::InitGame()
 
 		m_GUISheetManager->AddSheet(Steel::GUIState::G_MAINMENU, new Steel::MainMenuGUISheet(m_textures["logo"]));
 		m_GUISheetManager->AddSheet(Steel::GUIState::G_NEWGAME, new Steel::NewGameGUISheet(m_textures["newgame"]));
+		m_GUISheetManager->AddSheet(Steel::GUIState::G_GAME, new Steel::InGameGUISheet());
 
 		result = true;
 	}
@@ -167,6 +180,39 @@ bool AppManager::InitBullet(bool debug)
 	return true;
 }
 
+void AppManager::MatchLightingToSeason(Season season)
+{
+	for (auto l : m_lights)
+	{
+		l.second->setVisible(false);
+	}
+
+	if (season == Season::S_SUMMER)
+	{
+		m_lights["summer"]->setVisible(true);
+		m_activeLight = m_lights["summer"];
+		//irrScene->setShadowColor(m_summerTint);
+	}
+	else if (season == Season::S_AUTUMN)
+	{
+		m_lights["autumn"]->setVisible(true);
+		m_activeLight = m_lights["autumn"];
+		//irrScene->setShadowColor(m_autumnTint);
+	}
+	else if (season == Season::S_WINTER)
+	{
+		m_lights["winter"]->setVisible(true);
+		m_activeLight = m_lights["winter"];
+		//irrScene->setShadowColor(m_winterTint);
+	}
+	else if (season == Season::S_SPRING)
+	{
+		m_lights["spring"]->setVisible(true);
+		m_activeLight = m_lights["spring"];
+		//irrScene->setShadowColor(m_springTint);
+	}
+}
+
 bool AppManager::Init()
 {
 	bool ret = false;
@@ -186,8 +232,10 @@ bool AppManager::Init()
 		
 		m_terrains[tptr->GetName()] = irrScene->addTerrainSceneNode(tptr->GetHeightmapFilename().c_str(), 0, -1, irr::core::vector3df(), irr::core::vector3df(), irr::core::vector3df(tptr->GetScale(), 1.0, tptr->GetScale()));
 		
-		m_terrains[tptr->GetName()]->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+		m_terrains[tptr->GetName()]->setMaterialFlag(irr::video::EMF_LIGHTING, true);
 		m_terrains[tptr->GetName()]->setMaterialTexture(0, irrDriver->getTexture(tptr->GetDiffuseFilename().c_str()));
+
+		MatchLightingToSeason(Season::S_SUMMER);
 
 		//add a detail map
 		/*if (tptr->GetDetailFilename().size() > 1)
@@ -199,6 +247,7 @@ bool AppManager::Init()
 		m_terrains[tptr->GetName()]->scaleTexture(1.0f, 20.0f);
 
 		m_cameras["default"]->setPosition(irr::core::vector3df(-400, 1700, -400));
+		m_cameras["default"]->setFarValue(100000);
 		m_cameras["gui"]->setPosition(m_cameras["default"]->getPosition());
 
 		//add the test terrain to the bullet world
@@ -335,6 +384,11 @@ bool AppManager::OnEvent(const irr::SEvent &event)
 					irrScene->setActiveCamera(m_cameras["gui"]);
 				else
 					irrScene->setActiveCamera(m_cameras["default"]);
+				break;
+				case 's':
+					m_gameMaster->PassSeason();
+					MatchLightingToSeason(m_gameMaster->GetCurrentSeason());
+				break;
 			}
 		}
 		break;
@@ -369,9 +423,26 @@ bool AppManager::OnEvent(const irr::SEvent &event)
 					if (eventId == Steel::NewGameMenuID::M_NG_STARTGAME_ID)
 					{
 						//get the selected scenario from whichever tab is active
-						irr::gui::IGUIElement *tabElement = irrGUI->getRootGUIElement()->getElementFromId(Steel::NewGameMenuID::M_NG_GAMETAB_ID, true);
+						Steel::NewGameGUISheet *sheet = dynamic_cast<Steel::NewGameGUISheet*>(m_GUISheetManager->GetSheet(Steel::GUIState::G_NEWGAME));
 						
-						
+						if (sheet->GetActiveTabIndex() == sheet->GetCampaignTabIndex())
+						{
+							//get the name from the edit box
+							auto listBox = sheet->GetCampaignLevelListBox();
+							auto selectedLevel = listBox->getListItem(listBox->getSelected());
+
+							char name[256] = { 0 };
+							wcstombs(name, selectedLevel, 255);
+
+							auto selLvl = m_gameMaster->GetLevelByName(name);
+							m_gameMaster->SetCurrentLevel(selLvl->GetLevelFilename());
+						}
+						else if (sheet->GetActiveTabIndex() == sheet->GetScenarioTabIndex())
+						{
+
+						}
+
+						m_GUIState->ChangeState(Steel::GUIState::G_GAME);
 					}
 					if (eventId == Steel::NewGameMenuID::M_NG_REGENRANDOM_ID)
 					{
@@ -443,14 +514,8 @@ void AppManager::UpdateGUI()
 		switch (cur)
 		{
 			case Steel::GUIState::G_SPLASH:
-				break;
-
 			case Steel::GUIState::G_LOADING:
-				break;
-
 			case Steel::GUIState::G_MAINMENU:
-				break;
-
 			case Steel::GUIState::G_NEWGAME:
 				break;
 			default:

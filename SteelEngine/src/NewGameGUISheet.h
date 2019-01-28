@@ -2,6 +2,7 @@
 #define NEWGAMEGUISHEET_H
 
 #include "AbstractGUISheet.h"
+#include "GUIMenu.h"
 #include <IGUIEnvironment.h>
 #include <ITexture.h>
 #include <IGUIImage.h>
@@ -21,10 +22,12 @@ namespace Steel
 			irr::gui::IGUITabControl *m_tabControl;
 			
 			irr::gui::IGUITab		*m_campaignTab;
+			int						m_campaignTabIndex;
 			irr::gui::IGUIListBox	*m_campaignList;
 			irr::gui::IGUIListBox	*m_campaignLevelList;
 
 			irr::gui::IGUITab		*m_scenarioTab;
+			int						m_scenarioTabIndex;
 			irr::gui::IGUIListBox	*m_scenarioList;
 			irr::gui::IGUIListBox	*m_scenarioLevelList;
 			
@@ -37,8 +40,14 @@ namespace Steel
 			NewGameGUISheet(irr::video::ITexture *newGameTexture);
 			virtual ~NewGameGUISheet();
 
-			void	Init(int windowWidth, int windowHeight, GameMaster *game);
-			void	Draw(irr::gui::IGUIEnvironment *irrGUI);
+			void					Init(int windowWidth, int windowHeight, GameMaster *game);
+			void					Draw(irr::gui::IGUIEnvironment *irrGUI);
+
+			int						GetActiveTabIndex(){ return m_tabControl->getActiveTab(); }
+			int						GetCampaignTabIndex() { return m_campaignTabIndex; }
+			int						GetScenarioTabIndex() { return m_scenarioTabIndex; }
+			irr::gui::IGUIListBox	*GetCampaignListBox() { return m_campaignList; }
+			irr::gui::IGUIListBox	*GetCampaignLevelListBox() { return m_campaignLevelList; }
 	};
 }
 #endif

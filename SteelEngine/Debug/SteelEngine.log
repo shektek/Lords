@@ -1,28 +1,9 @@
-﻿Build started 26/01/2019 3:25:59 PM.
+﻿Build started 28/01/2019 2:35:00 PM.
      1>Project "G:\dev\SteelEngine\SteelEngine\SteelEngine.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"G:\dev\bullet3-2.86.1\src" /I"G:\dev\irrlicht-1.8.3\include" /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt src\TerrainFactory.cpp
-         TerrainFactory.cpp
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"G:\dev\SteelEngine\Debug\SteelEngine.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"G:\dev\SteelEngine\Debug\SteelEngine.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"G:\dev\SteelEngine\Debug\SteelEngine.lib" /MACHINE:X86 Debug\AppManager.obj
-         Debug\GameMaster.obj
-         Debug\GUISheetManager.obj
-         Debug\GUIStateMachine.obj
-         Debug\Level.obj
-         Debug\main.obj
-         Debug\MainMenuGUISheet.obj
-         Debug\NewGameGUISheet.obj
-         Debug\PeasantFactory.obj
-         Debug\Resource.obj
-         Debug\ResourceFactory.obj
-         Debug\Terrain.obj
-         Debug\TerrainFactory.obj
-         Debug\TerrainGenerator.obj
-         Debug\Territory.obj
-         Debug\TerritoryFactory.obj
+     1>Link:
          SteelEngine.vcxproj -> G:\dev\SteelEngine\Debug\SteelEngine.exe
      1>Done Building Project "G:\dev\SteelEngine\SteelEngine\SteelEngine.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.68
+Time Elapsed 00:00:00.03

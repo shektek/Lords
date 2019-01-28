@@ -3,5 +3,5 @@ TerrainWidth=256
 TerrainHeight=256
 TerrainScale=10
 HeightmapFile=resources/textures/hm257.png
-DiffusemapFile=resources/textures/hm257.png
+DiffusemapFile=resources/textures/terrain-detail.jpg
 DetailmapFile=resources/textures/terrain-detail.jpg
