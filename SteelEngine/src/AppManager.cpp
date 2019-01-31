@@ -96,8 +96,8 @@ bool AppManager::InitIrrlicht()
 		irrGUI->getSkin()->setFont(irrGUI->getFont("resources/fonts/cormorant_large.png"));
 		m_textures["logo"] = irrDriver->getTexture("resources/textures/logo.png");
 		m_textures["newgame"] = irrDriver->getTexture("resources/textures/newgame.png");
-		//m_cameras["default"] = irrScene->addCameraSceneNodeFPS();
-		m_cameras["default"] = irrScene->addCameraSceneNode();
+		m_cameras["default"] = irrScene->addCameraSceneNodeFPS();
+		//m_cameras["default"] = irrScene->addCameraSceneNode();
 
 		m_summerTint = irr::video::SColor(64, 255, 240, 215);
 		m_autumnTint = irr::video::SColor(64, 255, 240, 200);
@@ -246,11 +246,16 @@ bool AppManager::Init()
 
 		m_terrains[tptr->GetName()]->scaleTexture(1.0f, 20.0f);
 
-		m_cameras["default"]->setPosition(irr::core::vector3df(-400, 1700, -400));
+		m_currentCameraHeight = m_defaultCameraHeight = 1700;
+		m_currentCameraTargetHeight = m_defaultCameraTargetHeight = 1690;
+		m_cameraZoomAmount = 2.0;
+
+		m_cameras["default"]->setPosition(irr::core::vector3df(0, m_defaultCameraHeight, 0));
+		m_cameras["default"]->setTarget(irr::core::vector3df(0, m_defaultCameraTargetHeight, 0));
 		m_cameras["default"]->updateAbsolutePosition();
-		m_cameras["default"]->setTarget(irr::core::vector3df(0, 0, 0));
+		
 		m_cameras["default"]->bindTargetAndRotation(false);
-		m_cameras["default"]->setFarValue(100000);
+		m_cameras["default"]->setFarValue(10000);
 //		m_cameras["gui"]->setPosition(m_cameras["default"]->getPosition());
 
 		//add the test terrain to the bullet world
@@ -315,9 +320,16 @@ void AppManager::Run()
 		UpdatePhysics(delta);
 
 		m_scrollBoundarySize = ((float)m_width / (float)m_height) * 75;
-		m_scrollSpeed = 1;
-		m_nonScrollBounds = irr::core::recti(0 + m_scrollBoundarySize, 0 + m_scrollBoundarySize, 
+		int cornerBoundary = m_scrollBoundarySize * 1.5;
+		m_scrollSpeed = 4.0;
+		m_nonScrollBounds = irr::core::recti(m_scrollBoundarySize, m_scrollBoundarySize, 
 												m_width - m_scrollBoundarySize, m_height - m_scrollBoundarySize);
+
+		//calculate screen corners, top-left clockwise
+		m_scrollBoundaries[0] = irr::core::recti(0, 0, m_width, cornerBoundary);
+		m_scrollBoundaries[1] = irr::core::recti(m_width-cornerBoundary, 0, m_width, m_height);
+		m_scrollBoundaries[2] = irr::core::recti(0, m_height-cornerBoundary, m_width, m_height);
+		m_scrollBoundaries[3] = irr::core::recti(0, 0, cornerBoundary, m_height);
 		
 		irrDriver->beginScene();
 
@@ -372,19 +384,18 @@ void AppManager::DoPassiveEvents()
 	if (m_isScrolling)
 	{
 		auto newpos = m_cameras["default"]->getPosition();
-		auto newtarget = m_cameras["default"]->getPosition();
+		auto newtarget = m_cameras["default"]->getTarget();
 
 		newpos.X += m_lastScrollX;
+		//newpos.Y = m_currentCameraHeight;
 		newpos.Z += m_lastScrollY;
 		newtarget.X += m_lastScrollX;
+		//newtarget.Y = m_currentCameraTargetHeight;
 		newtarget.Z += m_lastScrollY;
 
 		m_cameras["default"]->setPosition(newpos);
+		m_cameras["default"]->setTarget(newtarget);
 		m_cameras["default"]->updateAbsolutePosition();
-		//m_cameras["default"]->setTarget(newtarget);
-
-		printf("position:\tx=%d y=%d z=%d\n", newpos.X, newpos.Y, newpos.Z);
-		printf("target:\tx=%d y=%d z=%d\n", newtarget.X, newtarget.Y, newtarget.Z);
 	}
 }
 
@@ -410,9 +421,10 @@ bool AppManager::OnEvent(const irr::SEvent &event)
 			switch (event.KeyInput.Char)
 			{
 				case 'c':
-					m_cameras["default"]->setPosition(irr::core::vector3df(-400, 1700, -400));
+					m_cameras["default"]->setPosition(irr::core::vector3df(0, m_defaultCameraHeight, 0));
+					m_cameras["default"]->setTarget(irr::core::vector3df(0, m_defaultCameraTargetHeight, 0));
 					m_cameras["default"]->updateAbsolutePosition();
-					//m_cameras["default"]->setTarget(irr::core::vector3df(0, 0, 0));
+					break;
 				case 's':
 					m_gameMaster->PassSeason();
 					MatchLightingToSeason(m_gameMaster->GetCurrentSeason());
@@ -431,14 +443,14 @@ bool AppManager::OnEvent(const irr::SEvent &event)
 					irr::s32 xtranslation = 0, ztranslation = 0;
 					auto center = m_nonScrollBounds.getCenter();
 
-					if (mousepos.X < center.X)
-						xtranslation -= m_scrollSpeed;
-					else if (mousepos.X > center.X)
+					//find closest edge
+					if (m_scrollBoundaries[0].isPointInside(mousepos))
 						xtranslation += m_scrollSpeed;
-
-					if (mousepos.Y < center.Y)
+					if (m_scrollBoundaries[1].isPointInside(mousepos))
 						ztranslation -= m_scrollSpeed;
-					else if (mousepos.Y > center.Y)
+					if (m_scrollBoundaries[2].isPointInside(mousepos))
+						xtranslation -= m_scrollSpeed;
+					if (m_scrollBoundaries[3].isPointInside(mousepos))
 						ztranslation += m_scrollSpeed;
 
 					auto newpos = m_cameras["default"]->getPosition();
@@ -446,16 +458,8 @@ bool AppManager::OnEvent(const irr::SEvent &event)
 					
 					m_lastScrollX = xtranslation;
 					m_lastScrollY = ztranslation;
-					
-					newpos.X += xtranslation;
-					newpos.Z += ztranslation;
 
-					newtarget.X += xtranslation;
-					newtarget.Z += ztranslation;
-
-					m_cameras["default"]->setPosition(newpos);
-					m_cameras["default"]->updateAbsolutePosition();
-					//m_cameras["default"]->setTarget(newtarget);
+					//the actual scroll is considered a passive event
 				}
 				else
 				{
@@ -464,6 +468,22 @@ bool AppManager::OnEvent(const irr::SEvent &event)
 
 				m_lastMouseX = event.MouseInput.X;
 				m_lastMouseY = event.MouseInput.Y;
+			}
+			if (event.MouseInput.Event == irr::EMIE_MOUSE_WHEEL)
+			{
+				m_currentCameraHeight += event.MouseInput.Wheel * m_cameraZoomAmount;
+				m_currentCameraTargetHeight += event.MouseInput.Wheel * m_cameraZoomAmount;
+
+				auto newpos = m_cameras["default"]->getPosition();
+				auto newtarget = m_cameras["default"]->getTarget();
+
+				newpos.Y = m_currentCameraHeight;
+				newtarget.Y = m_currentCameraTargetHeight;
+
+				//it doesn't like having the height changed
+				//m_cameras["default"]->setPosition(newpos);
+				//m_cameras["default"]->updateAbsolutePosition();
+				//m_cameras["default"]->setTarget(newtarget);
 			}
 			break;
 

@@ -1,4 +1,4 @@
-﻿Build started 28/01/2019 5:12:15 PM.
+﻿Build started 31/01/2019 10:01:24 PM.
      1>Project "G:\dev\SteelEngine\SteelEngine\SteelEngine.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"G:\dev\bullet3-2.86.1\src" /I"G:\dev\irrlicht-1.8.3\include" /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt src\AppManager.cpp
@@ -8,21 +8,34 @@
      1>g:\dev\bullet3-2.86.1\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument' : truncation from 'double' to 'const btScalar'
      1>g:\dev\steelengine\steelengine\src\appmanager.cpp(163): warning C4305: 'argument' : truncation from 'double' to 'const btScalar'
      1>g:\dev\steelengine\steelengine\src\appmanager.cpp(233): warning C4244: 'argument' : conversion from 'int' to 'irr::f32', possible loss of data
-     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(317): warning C4244: '=' : conversion from 'float' to 'irr::s32', possible loss of data
-     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(329): warning C4018: '<' : signed/unsigned mismatch
-     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(333): warning C4018: '<' : signed/unsigned mismatch
-     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(337): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(338): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(341): warning C4244: 'argument' : conversion from 'int' to 'irr::f32', possible loss of data
-     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(341): warning C4244: 'argument' : conversion from 'double' to 'irr::f32', possible loss of data
-     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(345): warning C4244: 'argument' : conversion from 'double' to 'irr::f32', possible loss of data
-     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(347): warning C4244: 'argument' : conversion from 'double' to 'irr::f32', possible loss of data
-     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(604): warning C4244: 'argument' : conversion from 'double' to 'btScalar', possible loss of data
-     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(628): warning C4244: 'argument' : conversion from 'double' to 'btScalar', possible loss of data
-     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(629): warning C4244: 'argument' : conversion from 'double' to 'btScalar', possible loss of data
-     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(630): warning C4244: 'argument' : conversion from 'double' to 'btScalar', possible loss of data
-     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(660): warning C4018: '<' : signed/unsigned mismatch
-     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(743): warning C4305: 'argument' : truncation from 'double' to 'btScalar'
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(253): warning C4244: 'argument' : conversion from 'irr::s32' to 'irr::f32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(254): warning C4244: 'argument' : conversion from 'irr::s32' to 'irr::f32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(322): warning C4244: '=' : conversion from 'float' to 'irr::s32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(323): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(341): warning C4018: '<' : signed/unsigned mismatch
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(345): warning C4018: '<' : signed/unsigned mismatch
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(349): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(350): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(353): warning C4244: 'argument' : conversion from 'int' to 'irr::f32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(353): warning C4244: 'argument' : conversion from 'double' to 'irr::f32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(357): warning C4244: 'argument' : conversion from 'double' to 'irr::f32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(359): warning C4244: 'argument' : conversion from 'double' to 'irr::f32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(424): warning C4244: 'argument' : conversion from 'irr::s32' to 'irr::f32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(425): warning C4244: 'argument' : conversion from 'irr::s32' to 'irr::f32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(448): warning C4244: '+=' : conversion from 'double' to 'irr::s32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(450): warning C4244: '-=' : conversion from 'double' to 'irr::s32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(452): warning C4244: '-=' : conversion from 'double' to 'irr::s32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(454): warning C4244: '+=' : conversion from 'double' to 'irr::s32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(474): warning C4244: '+=' : conversion from 'double' to 'irr::s32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(475): warning C4244: '+=' : conversion from 'double' to 'irr::s32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(480): warning C4244: '=' : conversion from 'irr::s32' to 'irr::f32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(481): warning C4244: '=' : conversion from 'irr::s32' to 'irr::f32', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(623): warning C4244: 'argument' : conversion from 'double' to 'btScalar', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(647): warning C4244: 'argument' : conversion from 'double' to 'btScalar', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(648): warning C4244: 'argument' : conversion from 'double' to 'btScalar', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(649): warning C4244: 'argument' : conversion from 'double' to 'btScalar', possible loss of data
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(679): warning C4018: '<' : signed/unsigned mismatch
+     1>g:\dev\steelengine\steelengine\src\appmanager.cpp(762): warning C4305: 'argument' : truncation from 'double' to 'btScalar'
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"G:\dev\SteelEngine\Debug\SteelEngine.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"G:\dev\SteelEngine\Debug\SteelEngine.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"G:\dev\SteelEngine\Debug\SteelEngine.lib" /MACHINE:X86 Debug\AppManager.obj
          Debug\GameMaster.obj
@@ -46,4 +59,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.56
+Time Elapsed 00:00:01.51

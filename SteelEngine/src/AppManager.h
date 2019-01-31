@@ -102,11 +102,21 @@ class AppManager : public irr::IEventReceiver
 		//input
 		irr::s32			m_lastMouseX;
 		irr::s32			m_lastMouseY;
+
 		irr::core::recti	m_nonScrollBounds;
+		irr::core::recti	m_scrollBoundaries[4];
 		irr::s32			m_scrollBoundarySize;
-		irr::s32			m_scrollSpeed;
+
+		double				m_scrollSpeed;
 		irr::s32			m_lastScrollX;
 		irr::s32			m_lastScrollY;
+		
+		irr::s32			m_defaultCameraHeight;
+		irr::s32			m_defaultCameraTargetHeight;
+		irr::s32			m_currentCameraHeight;
+		irr::s32			m_currentCameraTargetHeight;
+		double				m_cameraZoomAmount;
+
 		bool				m_isScrolling;
 
 		//loop control
