@@ -1,4 +1,5 @@
 #include "InGameGUISheet.h"
+#include "GUIMenu.h"
 
 namespace Steel
 {
@@ -27,6 +28,15 @@ namespace Steel
 
 	void InGameGUISheet::Draw(irr::gui::IGUIEnvironment *irrGUI)
 	{
+		//shorthand
+		double winx = m_windowWidth;
+		double winy = m_windowHeight;
+		double winr = m_windowRatio;
+		double bw = m_buttonWidth;
+		double bh = m_buttonHeight;
+		double bg = m_buttonDistance;
 
+		m_endTurnButton = irrGUI->addButton(irr::core::rect<irr::s32>(winx - (bw + bg), winy - (bh + bg), winx - bg, winy - bg), 0,
+			Steel::InGameMenuID::M_IG_ENDTURN, L"End turn", L"Pass to the next season");
 	}
 }

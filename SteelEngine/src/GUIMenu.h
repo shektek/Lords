@@ -47,5 +47,12 @@ namespace Steel
 		M_OM_BACK,
 		M_OM_MAX
 	};
+
+	enum InGameMenuID
+	{
+		M_IG_NONE = OptionsMenuID::M_OM_MAX,
+		M_IG_ENDTURN,
+		M_IG_MAX
+	};
 }
 #endif

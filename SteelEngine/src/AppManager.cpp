@@ -96,8 +96,8 @@ bool AppManager::InitIrrlicht()
 		irrGUI->getSkin()->setFont(irrGUI->getFont("resources/fonts/cormorant_large.png"));
 		m_textures["logo"] = irrDriver->getTexture("resources/textures/logo.png");
 		m_textures["newgame"] = irrDriver->getTexture("resources/textures/newgame.png");
-		m_cameras["default"] = irrScene->addCameraSceneNodeFPS();
-		//m_cameras["default"] = irrScene->addCameraSceneNode();
+		//m_cameras["default"] = irrScene->addCameraSceneNodeFPS();
+		m_cameras["default"] = irrScene->addCameraSceneNode();
 
 		m_summerTint = irr::video::SColor(64, 255, 240, 215);
 		m_autumnTint = irr::video::SColor(64, 255, 240, 200);
@@ -319,7 +319,7 @@ void AppManager::Run()
 
 		UpdatePhysics(delta);
 
-		m_scrollBoundarySize = ((float)m_width / (float)m_height) * 75;
+		m_scrollBoundarySize = ((float)m_width / (float)m_height) * 30;
 		int cornerBoundary = m_scrollBoundarySize * 1.5;
 		m_scrollSpeed = 4.0;
 		m_nonScrollBounds = irr::core::recti(m_scrollBoundarySize, m_scrollBoundarySize, 
@@ -403,184 +403,185 @@ bool AppManager::OnEvent(const irr::SEvent &event)
 {
 	bool ret = true;
 
-	if (event.MouseInput.isLeftPressed())
-	{
+	//if (event.MouseInput.isLeftPressed())
+	//{
 		//Steel::Terrain *tptr = m_gameMaster->levels[0]->terrain;
 		//int r = (rand() % 140) - 71;
 		//btVector3 center(m_terrains[tptr->GetName()]->getTerrainCenter().X + r, m_terrains[tptr->GetName()]->getTerrainCenter().Y + 400, m_terrains[tptr->GetName()]->getTerrainCenter().Z + r);
 
 		//CreateBox(center, irr::core::vector3df(50.0, 50.0, 50.0), 10.0);
+	//}
+
+	if (event.EventType == irr::EEVENT_TYPE::EET_KEY_INPUT_EVENT)
+	{
+		switch (event.KeyInput.Char)
+		{
+		case 'c':
+			m_cameras["default"]->setPosition(irr::core::vector3df(0, m_defaultCameraHeight, 0));
+			m_cameras["default"]->setTarget(irr::core::vector3df(0, m_defaultCameraTargetHeight, 0));
+			m_cameras["default"]->updateAbsolutePosition();
+		break;
+		/*case 's':
+			m_gameMaster->PassSeason();
+			MatchLightingToSeason(m_gameMaster->GetCurrentSeason());
+		break;*/
+		}
 	}
 
-	switch(event.EventType)
+	if (event.EventType == irr::EEVENT_TYPE::EET_MOUSE_INPUT_EVENT)
 	{
-		//very hacky
-		//really needs an input handler of some kind to switch between actionsets
-		case irr::EEVENT_TYPE::EET_KEY_INPUT_EVENT:
+		ret = false;	//let irrlicht handle the gui events
+		if (event.MouseInput.X != m_lastMouseX || event.MouseInput.Y != m_lastMouseY)
 		{
-			switch (event.KeyInput.Char)
+			irr::core::position2di mousepos(event.MouseInput.X, event.MouseInput.Y);
+			if (!m_nonScrollBounds.isPointInside(mousepos))
 			{
-				case 'c':
-					m_cameras["default"]->setPosition(irr::core::vector3df(0, m_defaultCameraHeight, 0));
-					m_cameras["default"]->setTarget(irr::core::vector3df(0, m_defaultCameraTargetHeight, 0));
-					m_cameras["default"]->updateAbsolutePosition();
-					break;
-				case 's':
-					m_gameMaster->PassSeason();
-					MatchLightingToSeason(m_gameMaster->GetCurrentSeason());
-				break;
-			}
-		}
-		break;
+				m_isScrolling = true;
+				irr::s32 xtranslation = 0, ztranslation = 0;
+				auto center = m_nonScrollBounds.getCenter();
 
-		case irr::EEVENT_TYPE::EET_MOUSE_INPUT_EVENT:
-			if (event.MouseInput.X != m_lastMouseX || event.MouseInput.Y != m_lastMouseY)
-			{
-				irr::core::position2di mousepos(event.MouseInput.X, event.MouseInput.Y);
-				if (!m_nonScrollBounds.isPointInside(mousepos))
-				{
-					m_isScrolling = true;
-					irr::s32 xtranslation = 0, ztranslation = 0;
-					auto center = m_nonScrollBounds.getCenter();
-
-					//find closest edge
-					if (m_scrollBoundaries[0].isPointInside(mousepos))
-						xtranslation += m_scrollSpeed;
-					if (m_scrollBoundaries[1].isPointInside(mousepos))
-						ztranslation -= m_scrollSpeed;
-					if (m_scrollBoundaries[2].isPointInside(mousepos))
-						xtranslation -= m_scrollSpeed;
-					if (m_scrollBoundaries[3].isPointInside(mousepos))
-						ztranslation += m_scrollSpeed;
-
-					auto newpos = m_cameras["default"]->getPosition();
-					auto newtarget = m_cameras["default"]->getTarget();
-					
-					m_lastScrollX = xtranslation;
-					m_lastScrollY = ztranslation;
-
-					//the actual scroll is considered a passive event
-				}
-				else
-				{
-					m_isScrolling = false;
-				}
-
-				m_lastMouseX = event.MouseInput.X;
-				m_lastMouseY = event.MouseInput.Y;
-			}
-			if (event.MouseInput.Event == irr::EMIE_MOUSE_WHEEL)
-			{
-				m_currentCameraHeight += event.MouseInput.Wheel * m_cameraZoomAmount;
-				m_currentCameraTargetHeight += event.MouseInput.Wheel * m_cameraZoomAmount;
+				//find closest edge
+				if (m_scrollBoundaries[0].isPointInside(mousepos))
+					xtranslation += m_scrollSpeed;
+				if (m_scrollBoundaries[1].isPointInside(mousepos))
+					ztranslation -= m_scrollSpeed;
+				if (m_scrollBoundaries[2].isPointInside(mousepos))
+					xtranslation -= m_scrollSpeed;
+				if (m_scrollBoundaries[3].isPointInside(mousepos))
+					ztranslation += m_scrollSpeed;
 
 				auto newpos = m_cameras["default"]->getPosition();
 				auto newtarget = m_cameras["default"]->getTarget();
 
-				newpos.Y = m_currentCameraHeight;
-				newtarget.Y = m_currentCameraTargetHeight;
+				m_lastScrollX = xtranslation;
+				m_lastScrollY = ztranslation;
 
-				//it doesn't like having the height changed
-				//m_cameras["default"]->setPosition(newpos);
-				//m_cameras["default"]->updateAbsolutePosition();
-				//m_cameras["default"]->setTarget(newtarget);
+				//the actual scroll is considered a passive event
 			}
+			else
+			{
+				m_isScrolling = false;
+			}
+
+			m_lastMouseX = event.MouseInput.X;
+			m_lastMouseY = event.MouseInput.Y;
+		}
+		else
+		if (event.MouseInput.Event == irr::EMIE_MOUSE_WHEEL)
+		{
+			m_currentCameraHeight += event.MouseInput.Wheel * m_cameraZoomAmount;
+			m_currentCameraTargetHeight += event.MouseInput.Wheel * m_cameraZoomAmount;
+
+			auto newpos = m_cameras["default"]->getPosition();
+			auto newtarget = m_cameras["default"]->getTarget();
+
+			newpos.Y = m_currentCameraHeight;
+			newtarget.Y = m_currentCameraTargetHeight;
+
+			//it doesn't like having the height changed
+			//m_cameras["default"]->setPosition(newpos);
+			//m_cameras["default"]->updateAbsolutePosition();
+			//m_cameras["default"]->setTarget(newtarget);
+		}
+	}
+
+	if(event.EventType == irr::EEVENT_TYPE::EET_GUI_EVENT)
+	{
+		//this tells us which specific element of the GUI was selected
+		int eventId = event.GUIEvent.Caller->getID();
+			
+		switch(event.GUIEvent.EventType)
+		{
+			case irr::gui::EGUI_EVENT_TYPE::EGET_SCROLL_BAR_CHANGED:
+			break;
+				
+			case irr::gui::EGUI_EVENT_TYPE::EGET_BUTTON_CLICKED:	
+				//main menu buttons
+				if (eventId == Steel::MainMenuID::M_MM_NEWGAME_ID)
+					m_GUIState->ChangeState(Steel::GUIState::G_NEWGAME);
+				else if (eventId == Steel::MainMenuID::M_MM_LOADGAME_ID)
+					m_GUIState->ChangeState(Steel::GUIState::G_LOADGAME);
+				else if (eventId == Steel::MainMenuID::M_MM_OPTIONS_ID)
+					m_GUIState->ChangeState(Steel::GUIState::G_OPTIONSMENU);
+				else if (eventId == Steel::MainMenuID::M_MM_QUIT_ID)
+				{
+					m_running = false;
+					irrDevice->closeDevice();
+				}
+
+				//new game buttons
+				if (eventId == Steel::NewGameMenuID::M_NG_BACK_ID)
+					m_GUIState->Back();
+				if (eventId == Steel::NewGameMenuID::M_NG_STARTGAME_ID)
+				{
+					//get the selected scenario from whichever tab is active
+					Steel::NewGameGUISheet *sheet = dynamic_cast<Steel::NewGameGUISheet*>(m_GUISheetManager->GetSheet(Steel::GUIState::G_NEWGAME));
+						
+					if (sheet->GetActiveTabIndex() == sheet->GetCampaignTabIndex())
+					{
+						//get the name from the edit box
+						auto listBox = sheet->GetCampaignLevelListBox();
+						auto selectedLevel = listBox->getListItem(listBox->getSelected());
+
+						char name[256] = { 0 };
+						wcstombs(name, selectedLevel, 255);
+
+						auto selLvl = m_gameMaster->GetLevelByName(name);
+						m_gameMaster->SetCurrentLevel(selLvl->GetLevelFilename());
+					}
+					else if (sheet->GetActiveTabIndex() == sheet->GetScenarioTabIndex())
+					{
+
+					}
+
+					m_GUIState->ChangeState(Steel::GUIState::G_GAME);
+				}
+				if (eventId == Steel::NewGameMenuID::M_NG_REGENRANDOM_ID)
+				{
+//						m_gameMaster->territories.clear();
+					irr::gui::IGUIElement *br = irrGUI->getRootGUIElement()->getElementFromId(Steel::NewGameMenuID::M_NG_MINTERRITORIES_ID, true);
+					irr::gui::IGUIElement *pr = irrGUI->getRootGUIElement()->getElementFromId(Steel::NewGameMenuID::M_NG_MAXTERRITORIES_ID, true);
+
+					int min = _wtoi(br->getText());
+					int max = _wtoi(pr->getText());
+
+					int rnum = (rand() % (max+1-min)) + min;
+
+					printf("Creating %d new territories...\n", rnum);
+
+					for (int i = 0; i < rnum; i++)
+					{
+						//m_gameMaster->territories.push_back(m_gameMaster->territoryFactory->CreateNewRandomTerritory());
+						//m_gameMaster->territories.back()->m_peasantFactory = m_gameMaster->peasantFactory;
+
+						//printf("%s\n", m_gameMaster->territories[i]->GetName().c_str());
+					}
+
+					//now create a new terrain for it
+					//TODO: scale according to territory count
+					///*
+					//delete[] m_gameMaster->terrain;
+					//m_gameMaster->terrain = m_gameMaster->terrainGenerator->Generate(m_gameMaster->terrainWidth, m_gameMaster->terrainHeight);
+					//irr::io::IReadFile *tfile = irrDevice->getFileSystem()->createMemoryReadFile(m_gameMaster->terrain, m_gameMaster->terrainWidth*m_gameMaster->terrainHeight, L"RandomHeightmap");
+					//m_terrains["RandomHeightmap"] = irrScene->addTerrainSceneNode(NULL, 0, -1, irr::core::vector3df(0.f, 0.f, 0.f), irr::core::vector3df(0.f, 0.f, 0.f), irr::core::vector3df(40.f, 4.4f, 40.f),
+					//	irr::video::SColor(0, 0, 0, 255), 5, irr::scene::ETPS_17, 4, true);
+					//m_terrains["RandomHeightmap"]->loadHeightMapRAW(tfile);
+					//*/
+
+				}
+
+				//in game buttons
+				if (eventId == Steel::InGameMenuID::M_IG_ENDTURN)
+				{
+					m_gameMaster->PassSeason();
+					MatchLightingToSeason(m_gameMaster->GetCurrentSeason());
+				}
+
 			break;
 
-		case irr::EEVENT_TYPE::EET_GUI_EVENT:
-		{
-			//this tells us which specific element of the GUI was selected
-			int eventId = event.GUIEvent.Caller->getID();
-			
-			switch(event.GUIEvent.EventType)
-			{
-				case irr::gui::EGUI_EVENT_TYPE::EGET_SCROLL_BAR_CHANGED:
-				break;
-				
-				case irr::gui::EGUI_EVENT_TYPE::EGET_BUTTON_CLICKED:	
-					//main menu buttons
-					if (eventId == Steel::MainMenuID::M_MM_NEWGAME_ID)
-						m_GUIState->ChangeState(Steel::GUIState::G_NEWGAME);
-					else if (eventId == Steel::MainMenuID::M_MM_LOADGAME_ID)
-						m_GUIState->ChangeState(Steel::GUIState::G_LOADGAME);
-					else if (eventId == Steel::MainMenuID::M_MM_OPTIONS_ID)
-						m_GUIState->ChangeState(Steel::GUIState::G_OPTIONSMENU);
-					else if (eventId == Steel::MainMenuID::M_MM_QUIT_ID)
-					{
-						m_running = false;
-						irrDevice->closeDevice();
-					}
-
-					//new game buttons
-					if (eventId == Steel::NewGameMenuID::M_NG_BACK_ID)
-						m_GUIState->Back();
-					if (eventId == Steel::NewGameMenuID::M_NG_STARTGAME_ID)
-					{
-						//get the selected scenario from whichever tab is active
-						Steel::NewGameGUISheet *sheet = dynamic_cast<Steel::NewGameGUISheet*>(m_GUISheetManager->GetSheet(Steel::GUIState::G_NEWGAME));
-						
-						if (sheet->GetActiveTabIndex() == sheet->GetCampaignTabIndex())
-						{
-							//get the name from the edit box
-							auto listBox = sheet->GetCampaignLevelListBox();
-							auto selectedLevel = listBox->getListItem(listBox->getSelected());
-
-							char name[256] = { 0 };
-							wcstombs(name, selectedLevel, 255);
-
-							auto selLvl = m_gameMaster->GetLevelByName(name);
-							m_gameMaster->SetCurrentLevel(selLvl->GetLevelFilename());
-						}
-						else if (sheet->GetActiveTabIndex() == sheet->GetScenarioTabIndex())
-						{
-
-						}
-
-						m_GUIState->ChangeState(Steel::GUIState::G_GAME);
-					}
-					if (eventId == Steel::NewGameMenuID::M_NG_REGENRANDOM_ID)
-					{
-//						m_gameMaster->territories.clear();
-						irr::gui::IGUIElement *br = irrGUI->getRootGUIElement()->getElementFromId(Steel::NewGameMenuID::M_NG_MINTERRITORIES_ID, true);
-						irr::gui::IGUIElement *pr = irrGUI->getRootGUIElement()->getElementFromId(Steel::NewGameMenuID::M_NG_MAXTERRITORIES_ID, true);
-
-						int min = _wtoi(br->getText());
-						int max = _wtoi(pr->getText());
-
-						int rnum = (rand() % (max+1-min)) + min;
-
-						printf("Creating %d new territories...\n", rnum);
-
-						for (int i = 0; i < rnum; i++)
-						{
-							//m_gameMaster->territories.push_back(m_gameMaster->territoryFactory->CreateNewRandomTerritory());
-							//m_gameMaster->territories.back()->m_peasantFactory = m_gameMaster->peasantFactory;
-
-							//printf("%s\n", m_gameMaster->territories[i]->GetName().c_str());
-						}
-
-						//now create a new terrain for it
-						//TODO: scale according to territory count
-						///*
-						//delete[] m_gameMaster->terrain;
-						//m_gameMaster->terrain = m_gameMaster->terrainGenerator->Generate(m_gameMaster->terrainWidth, m_gameMaster->terrainHeight);
-						//irr::io::IReadFile *tfile = irrDevice->getFileSystem()->createMemoryReadFile(m_gameMaster->terrain, m_gameMaster->terrainWidth*m_gameMaster->terrainHeight, L"RandomHeightmap");
-						//m_terrains["RandomHeightmap"] = irrScene->addTerrainSceneNode(NULL, 0, -1, irr::core::vector3df(0.f, 0.f, 0.f), irr::core::vector3df(0.f, 0.f, 0.f), irr::core::vector3df(40.f, 4.4f, 40.f),
-						//	irr::video::SColor(0, 0, 0, 255), 5, irr::scene::ETPS_17, 4, true);
-						//m_terrains["RandomHeightmap"]->loadHeightMapRAW(tfile);
-						//*/
-
-					}
-				break;
-
-				default:
-					ret = false;
-			}
+			default:
+				ret = false;
 		}
-		break;
-
-		default:
-			ret = false;
 	}
 
 	//printf("%.2lf %.2lf %.2lf\n", m_cameras["default"]->getRotation().X, m_cameras["default"]->getRotation().Y, m_cameras["default"]->getRotation().Z);
@@ -611,6 +612,7 @@ void AppManager::UpdateGUI()
 			case Steel::GUIState::G_LOADING:
 			case Steel::GUIState::G_MAINMENU:
 			case Steel::GUIState::G_NEWGAME:
+			case Steel::GUIState::G_GAME:
 				break;
 			default:
 				irrGUI->addButton(irr::core::rect<irr::s32>(m_width / 2 - 80, m_height / 2 - 15, m_width / 2 + 80, m_height / 2 + 15), 0, Steel::NewGameMenuID::M_NG_BACK_ID, L"Back", L"Return to previous menu");

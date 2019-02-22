@@ -8,7 +8,7 @@ namespace Steel
 	class InGameGUISheet : public AbstractGUISheet
 	{
 		private:
-
+			irr::gui::IGUIButton	*m_endTurnButton;
 
 		public:
 			InGameGUISheet();
