@@ -1,22 +1,24 @@
 //the map to use
 terrain=resources/levels/terraintest.ter
 levelname=Test Scenario
+territoryimage=resources/levels/LevelImageTest.bmp
 
 //territory number and name followed by a set of normalised points for drawing boundary lines
-territorydeclare=0, Luke1, {
-0.0, 0.0;
-0.0, 0.48;
-0.05, 0.52;
-0.1, 0.52;
-0.2, 0.45;
-0.5, 0.5;
-0.5, 0.0;
-}
+//territorydeclare=0, Luke1, {
+//0.0, 0.0;
+//0.0, 0.48;
+//0.05, 0.52;
+//0.1, 0.52;
+//0.2, 0.45;
+//0.5, 0.5;
+//0.5, 0.0;
+//}
 
-territorydeclare=1, Luke2, {
-0.5, 0.0;
-0.5, 0.5;
-1.0, 0.5;
-0.8, 0.25;
-1.0, 0.0;
-}
+
+//territorydeclare=1, Luke2, {
+//0.5, 0.0;
+//0.5, 0.5;
+//1.0, 0.5;
+//0.8, 0.25;
+//1.0, 0.0;
+//}

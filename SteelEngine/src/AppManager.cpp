@@ -5,17 +5,8 @@
 #include "InGameGUISheet.h"
 
 AppManager::AppManager()
+	: AppManager(true)
 {
-	AllocConsole();
-	freopen("CONOUT$", "w", stdout);
-	irrDevice = nullptr;
-
-	m_width = 1600;
-	m_height = 900;
-	m_vsync = true;
-	m_fullscreen = false;
-	m_bpp = 32;
-	m_windowName = "SteelEngine";
 }
 
 AppManager::AppManager(bool debug)
@@ -28,9 +19,9 @@ AppManager::AppManager(bool debug)
 
 	irrDevice = nullptr;
 
-	m_width = 640;
-	m_height = 480;
-	m_vsync = false;
+	m_width = 800;
+	m_height = 600;
+	m_vsync = true;
 	m_fullscreen = false;
 	m_bpp = 32;
 	m_windowName = "SteelEngine";

@@ -18,13 +18,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -43,7 +43,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>G:\dev\bullet3-2.86.1\src;G:\dev\irrlicht-1.8.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3-2.86.1\src;..\..\irrlicht-1.8.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -66,6 +66,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\AppManager.cpp" />
+    <ClCompile Include="src\BitmapLoader.cpp" />
     <ClCompile Include="src\GameMaster.cpp" />
     <ClCompile Include="src\GUISheetManager.cpp" />
     <ClCompile Include="src\GUIStateMachine.cpp" />
@@ -82,9 +83,11 @@
     <ClCompile Include="src\TerrainGenerator.cpp" />
     <ClCompile Include="src\Territory.cpp" />
     <ClCompile Include="src\TerritoryFactory.cpp" />
+    <ClCompile Include="src\TerritoryImage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AppManager.h" />
+    <ClInclude Include="src\BitmapLoader.h" />
     <ClInclude Include="src\CinematicGUISheet.h" />
     <ClInclude Include="src\CoolStuff.h" />
     <ClInclude Include="src\GameMaster.h" />
@@ -113,6 +116,7 @@
     <ClInclude Include="src\TerrainGenerator.h" />
     <ClInclude Include="src\Territory.h" />
     <ClInclude Include="src\TerritoryFactory.h" />
+    <ClInclude Include="src\TerritoryImage.h" />
     <ClInclude Include="StringTrim.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

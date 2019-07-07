@@ -2,6 +2,7 @@
 
 #include "GameMaster.h"
 #include "StringTrim.h"
+#include "TerritoryImage.h"
 
 namespace Steel
 {
@@ -28,6 +29,7 @@ namespace Steel
 		levels.clear();
 	}
 
+	//TODO: This is all really bad
 	bool GameMaster::AddLevel(const std::string &levelFilename)
 	{
 		bool ret = true;
@@ -74,6 +76,12 @@ namespace Steel
 						if (strstr(line, "levelname"))
 						{
 							levels.back()->SetLevelName(trim(std::string(epos)));
+						}
+
+						if (strstr(line, "territoryimage"))
+						{
+							char *eqPos = strchr(line, '=');
+							std::vector<Territory*> parsedTerritories = TerritoryImage::ParseImage(++eqPos);
 						}
 
 						if (strstr(line, "territorydeclare"))
