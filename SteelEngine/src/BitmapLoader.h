@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 
+#pragma pack(push, 1)
+
 struct BitmapFileHeader
 {
 	uint16_t	FileType;
@@ -38,6 +40,8 @@ struct BitmapColourHeader
 	uint32_t	ColourSpaceType{ 0x73524742 };	//sRGB
 	uint32_t	Unused[16]{ 0 };
 };
+
+#pragma pack(pop)
 
 struct BitmapChannels
 {

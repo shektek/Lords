@@ -110,10 +110,10 @@ BitmapColour BitmapFile::GetPixelAt(int x, int y)
 	BitmapColour result(0, 0, 0, 0);
 	int ch = _infoHeader.BitCount / 8;
 
-	result.RGBA.B = _data[ch * _infoHeader.Width];
-	result.RGBA.G = _data[ch * _infoHeader.Width + 1];
-	result.RGBA.R = _data[ch * _infoHeader.Width + 2];
-	if (ch == 4) result.RGBA.A = _data[ch * _infoHeader.Width + 3];
+	result.RGBA.B = _data[ch * (y * _infoHeader.Width + x) + 0];
+	result.RGBA.G = _data[ch * (y * _infoHeader.Width + x) + 1];
+	result.RGBA.R = _data[ch * (y * _infoHeader.Width + x) + 2];
+	if (ch == 4) result.RGBA.A = _data[ch * (y * _infoHeader.Width + x) + 3];
 
 	return result;
 }

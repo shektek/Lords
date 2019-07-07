@@ -19,8 +19,8 @@ AppManager::AppManager(bool debug)
 
 	irrDevice = nullptr;
 
-	m_width = 1440;
-	m_height = 900;
+	m_width = 1000;
+	m_height = 600;
 	m_vsync = true;
 	m_fullscreen = false;
 	m_bpp = 32;

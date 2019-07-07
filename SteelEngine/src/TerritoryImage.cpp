@@ -20,12 +20,24 @@ namespace Steel
 		Vector2d *awaitingCastle = nullptr;
 		Vector2d *awaitingTown = nullptr;
 
-		//assume top right is 0,0
-		for (int i = 0; i < bmp->GetWidth(); i++)
+		int i, j;
+		BitmapColour lastPixel(0,0,0,0);
+		//bottom left is 0,0
+		for (i = 0; i < bmp->GetWidth(); i++)
 		{
-			for (int j = 0; j < bmp->GetHeight(); j++)
+			for (j = 0; j < bmp->GetHeight(); j++)
 			{
 				auto pixel = bmp->GetPixelAt(i, j);
+				
+				if (pixel.RGBA.R != lastPixel.RGBA.R
+					|| pixel.RGBA.G != lastPixel.RGBA.G
+					|| pixel.RGBA.B != lastPixel.RGBA.B)
+				{
+					printf("Colour = {%d, %d, %d}\n", pixel.RGBA.R, pixel.RGBA.G, pixel.RGBA.B);
+				}
+
+				lastPixel = pixel;
+
 				if (pixel.Value == TerritoryImage::CastleColour.Value)
 				{
 					//if the first pixel read is a town or castle, it belongs to the first territory

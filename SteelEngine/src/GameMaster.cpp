@@ -81,7 +81,7 @@ namespace Steel
 						if (strstr(line, "territoryimage"))
 						{
 							char *eqPos = strchr(line, '=');
-							std::vector<Territory*> parsedTerritories = TerritoryImage::ParseImage(++eqPos);
+							std::vector<Territory*> parsedTerritories = TerritoryImage::ParseImage(trim(std::string(++eqPos)));
 						}
 
 						if (strstr(line, "territorydeclare"))
