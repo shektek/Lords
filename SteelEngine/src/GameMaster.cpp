@@ -127,7 +127,7 @@ namespace Steel
 								if (levels.back()->territories.size() < tnum + 1)
 								{
 									levels.back()->territories.resize(tnum + 1);
-									levels.back()->territories[tInd] = new Territory(tnamestr, peasantFactory);
+									levels.back()->territories[tInd] = new Territory(tnamestr, Pos3(), Pos3(), peasantFactory);
 								}
 							}
 							else ret = false;

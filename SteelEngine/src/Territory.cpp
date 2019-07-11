@@ -5,7 +5,7 @@ Territory::Territory()
 	m_name = "Unknown land";
 }
 
-Territory::Territory(const std::string &name, PeasantFactory *peasantFactory)
+Territory::Territory(const std::string &name, Pos3 castlePosition, Pos3 townPosition, PeasantFactory *peasantFactory)
 {
 	m_name = name;
 	m_peasants.clear();
@@ -14,6 +14,8 @@ Territory::Territory(const std::string &name, PeasantFactory *peasantFactory)
 	rla.name = m_resources[0]->GetName();
 	rla.peasants.clear();
 	rla.resource = m_resources[0];
+	m_castlePosition = castlePosition;
+	m_townPosition = townPosition;
 	m_labourAllocations.push_back(rla);
 	m_bounds.clear();
 	m_mapBounds.clear();

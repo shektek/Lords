@@ -22,6 +22,7 @@ class TerritoryFactory
 		~TerritoryFactory();
 
 		Territory	*CreateNewRandomTerritory();	//no parameters, random territory
+		std::string CreateRandomTerritoryName();
 };
 
 #endif

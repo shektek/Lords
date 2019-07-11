@@ -5,6 +5,7 @@
 #include <vector>
 #include "Territory.h"
 #include "BitmapLoader.h"
+#include "TerritoryFactory.h"
 
 namespace Steel
 {
@@ -15,7 +16,7 @@ namespace Steel
 			static BitmapColour		TownColour;
 
 		public:
-			static std::vector<Territory*>	ParseImage(std::string filename);
+			static std::vector<Territory*>	ParseImage(std::string filename, PeasantFactory *peasantFactory = nullptr, TerritoryFactory *territoryFactory = nullptr);
 	};
 }
 

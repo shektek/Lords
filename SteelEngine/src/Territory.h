@@ -24,6 +24,14 @@ struct Pos3
 	double x;
 	double y;
 	double z;
+
+	Pos3()
+		: Pos3(0,0,0)
+	{}
+
+	Pos3(double newX, double newY, double newZ)
+		: x(newX), y(newY), z(newZ)
+	{}
 };
 
 class Territory
@@ -39,9 +47,12 @@ class Territory
 		std::vector<Pos3> m_bounds;		//normalised
 		std::vector<Pos3> m_mapBounds;	//world-space
 
+		Pos3	m_castlePosition;
+		Pos3	m_townPosition;
+
 	public:
 		Territory();
-		Territory(const std::string &name, PeasantFactory *peasantFactory);
+		Territory(const std::string &name, Pos3 castlePosition, Pos3 townPosition, PeasantFactory *peasantFactory);
 		Territory(const Territory &other);
 		Territory(Territory *other);
 		~Territory();
@@ -60,11 +71,15 @@ class Territory
 		inline PeasantFactory	*GetPeasantFactory() { return m_peasantFactory; }
 		inline std::vector<Pos3> GetLocalBounds() { return m_bounds; }
 		inline std::vector<Pos3> GetMapBounds() { return m_mapBounds; }
+		inline Pos3				GetCastlePosition() { return m_castlePosition; }
+		inline Pos3				GetTownPosition() { return m_townPosition; }
 
 		inline void				SetName(const std::string &name) { m_name = name; }
 		inline void				SetPeasantFactory(PeasantFactory *peasantFactory) { m_peasantFactory = peasantFactory; }
 		inline void				SetLocalBounds(std::vector<Pos3> bounds) { m_bounds = bounds; }	//realistically this will affect the map bounds as well
 		inline void				SetMapBounds(std::vector<Pos3> mapBounds) { m_mapBounds = mapBounds; }
+		inline void				SetCastlePosition(Pos3 castlePosition) { m_castlePosition = castlePosition; }
+		inline void				SetTownPosition(Pos3 townPosition) { m_townPosition = townPosition; }
 };
 
 #endif

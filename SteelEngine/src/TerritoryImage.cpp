@@ -6,7 +6,8 @@ namespace Steel
 
 	BitmapColour TerritoryImage::TownColour = BitmapColour(255, 127, 63, 0);
 
-	std::vector<Territory*> TerritoryImage::ParseImage(std::string filename)
+	//for now assume that each territory will have a town and castle location
+	std::vector<Territory*> TerritoryImage::ParseImage(std::string filename, PeasantFactory *peasantFactory, TerritoryFactory *territoryFactory)
 	{
 		std::vector<Territory*> result;
 
@@ -62,6 +63,21 @@ namespace Steel
 						territoryColours.push_back(pixel);
 					}
 				}
+			}
+		}
+
+		//now we should have collections of territory boundaries, castle locations, and town locations
+		//the size of each should be the same
+		if (territoryColours.size() == castleLocations.size() && castleLocations.size() == townLocations.size())
+		{
+			for (int i = 0; i < territoryColours.size(); i++)
+			{
+				char d[2] = { '0' + i };
+				Pos3 castlePos(castleLocations[i].X, castleLocations[i].Y, 0.0);
+				Pos3 townPos(townLocations[i].X, townLocations[i].Y, 0.0);
+				std::string name = territoryFactory == nullptr ? ("territory " + std::string(d)) : territoryFactory->CreateRandomTerritoryName();
+				Territory* t = new Territory(name, castlePos, townPos, peasantFactory);
+				result.push_back(t);
 			}
 		}
 

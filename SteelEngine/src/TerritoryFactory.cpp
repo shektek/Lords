@@ -43,10 +43,15 @@ TerritoryFactory::~TerritoryFactory()
 
 Territory *TerritoryFactory::CreateNewRandomTerritory()
 {
+	return new Territory(CreateRandomTerritoryName(), /*TODO*/ Pos3(0,0,0), /*TODO*/ Pos3(0,0,0), m_peasantFactory);
+}
+
+std::string TerritoryFactory::CreateRandomTerritoryName()
+{
 	int rnn = rand() % m_names.size();
 	int rsn = rand() % m_surnames.size();
 
 	std::string name = m_names[rnn] + " " + m_surnames[rsn];
 
-	return new Territory(name, m_peasantFactory);
+	return name;
 }
