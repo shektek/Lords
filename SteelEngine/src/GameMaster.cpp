@@ -54,8 +54,7 @@ namespace Steel
 				if (state == 0)
 				{
 					//don't even bother with comment lines
-					if (strlen(line) > 1)
-					if (line[0] == '/' && line[1] == '/')
+					if (strlen(line) > 1 && line[0] == '/' && line[1] == '/')
 						continue;
 
 					char *epos = strchr(line, '=');
@@ -82,6 +81,11 @@ namespace Steel
 						{
 							char *eqPos = strchr(line, '=');
 							std::vector<Territory*> parsedTerritories = TerritoryImage::ParseImage(trim(std::string(++eqPos)));
+							for (Territory* parsedTerritory : parsedTerritories)
+							{
+								levels.back()->territories.push_back(parsedTerritory);
+							}
+							territoryFound = true;
 						}
 
 						if (strstr(line, "territorydeclare"))
@@ -197,6 +201,8 @@ namespace Steel
 			fclose(f);
 		}
 
+		//scale the normalised boundary positions
+		//TODO: Move this into the Territory class
 		if (territoryFound && terrainFound)
 		{
 			for (Territory *t : levels.back()->territories)
@@ -208,9 +214,9 @@ namespace Steel
 				{
 					Pos3 realBounds;
 
-					realBounds.x = bounds[i].x * levels.back()->relWidth;
+					realBounds.x = bounds[i].x * (levels.back()->relWidth / 100.0);
 					realBounds.y = 0;
-					realBounds.z = bounds[i].z * levels.back()->relHeight;
+					realBounds.z = bounds[i].z * (levels.back()->relHeight / 100.0);
 
 					mapBounds.push_back(realBounds);
 				}

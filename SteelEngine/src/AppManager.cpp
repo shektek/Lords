@@ -335,24 +335,30 @@ void AppManager::Run()
 
 			for (int j = 0; j < mapBounds.size(); j++)
 			{
-				float scale = 1.0;
+				double scale = 1.0;
 
-				int x = mapBounds[j].x * scale;
-				int z = mapBounds[j].z * scale;
+				double cx = mapBounds[j].x * scale;
+				double cz = mapBounds[j].z * scale;
+
+				double squareScale = 5.0;
+
+				double xm1 = cx - squareScale;
+				double xp1 = cx + squareScale;
+				double zm1 = cz - squareScale;
+				double zp1 = cz + squareScale;
 				
-
-				irr::core::vector3df f(x, mapBounds[j].y + 100, z);
-				irr::core::vector3df t;
-
-				if (j + 1 != mapBounds.size())
-					t = irr::core::vector3df(mapBounds[j + 1].x * scale, mapBounds[j + 1].y + 100, mapBounds[j + 1].z * scale);
-				else
-					t = irr::core::vector3df(mapBounds[0].x * scale, mapBounds[0].y + 100, mapBounds[0].z * scale);
-
+				irr::core::vector3df p1(xm1, mapBounds[j].y + 100, zp1);
+				irr::core::vector3df p2(xp1, mapBounds[j].y + 100, zp1);
+				irr::core::vector3df p3(xp1, mapBounds[j].y + 100, zm1);
+				irr::core::vector3df p4(xm1, mapBounds[j].y + 100, zm1);
+				
 				irr::video::SMaterial m;
 				m.Lighting = false;
 				irrDriver->setMaterial(m);
-				irrDriver->draw3DLine(f, t, irr::video::SColor(255, 255, 255, 255));
+				irrDriver->draw3DLine(p4, p1, irr::video::SColor(255, 255, 255, 255));
+				irrDriver->draw3DLine(p1, p2, irr::video::SColor(255, 255, 255, 255));
+				irrDriver->draw3DLine(p2, p3, irr::video::SColor(255, 255, 255, 255));
+				irrDriver->draw3DLine(p3, p4, irr::video::SColor(255, 255, 255, 255));
 			}
 
 		}
@@ -370,6 +376,7 @@ void AppManager::Run()
 	}
 }
 
+//not to be confused with the AI/physics update loop
 void AppManager::DoPassiveEvents()
 {
 	if (m_isScrolling)

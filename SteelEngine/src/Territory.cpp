@@ -3,6 +3,7 @@
 Territory::Territory()
 {
 	m_name = "Unknown land";
+	m_needsScaling = true;
 }
 
 Territory::Territory(const std::string &name, Pos3 castlePosition, Pos3 townPosition, PeasantFactory *peasantFactory)
@@ -20,6 +21,7 @@ Territory::Territory(const std::string &name, Pos3 castlePosition, Pos3 townPosi
 	m_bounds.clear();
 	m_mapBounds.clear();
 	m_peasantFactory = peasantFactory;
+	m_needsScaling = true;
 }
 
 Territory::Territory(const Territory &other)
@@ -29,6 +31,7 @@ Territory::Territory(const Territory &other)
 	m_labourAllocations = other.m_labourAllocations;
 	m_peasants = other.m_peasants;
 	m_peasantFactory = other.m_peasantFactory;
+	//TODO: Finish copying everything else
 }
 
 Territory::Territory(Territory *other)
@@ -38,6 +41,7 @@ Territory::Territory(Territory *other)
 	m_labourAllocations = other->m_labourAllocations;
 	m_peasants = other->m_peasants;
 	m_peasantFactory = other->m_peasantFactory;
+	//TODO: Finish copying everything else
 }
 
 Territory::~Territory()

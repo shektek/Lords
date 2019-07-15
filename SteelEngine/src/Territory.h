@@ -46,6 +46,7 @@ class Territory
 		std::vector<ResourceLabourAllocation>	m_labourAllocations;
 		std::vector<Pos3> m_bounds;		//normalised
 		std::vector<Pos3> m_mapBounds;	//world-space
+		bool m_needsScaling;	//the maps boundaries have been added in raw (i.e. image-derived) coordinates
 
 		Pos3	m_castlePosition;
 		Pos3	m_townPosition;
@@ -76,10 +77,14 @@ class Territory
 
 		inline void				SetName(const std::string &name) { m_name = name; }
 		inline void				SetPeasantFactory(PeasantFactory *peasantFactory) { m_peasantFactory = peasantFactory; }
-		inline void				SetLocalBounds(std::vector<Pos3> bounds) { m_bounds = bounds; }	//realistically this will affect the map bounds as well
-		inline void				SetMapBounds(std::vector<Pos3> mapBounds) { m_mapBounds = mapBounds; }
+		inline void				SetLocalBounds(std::vector<Pos3> bounds) { m_bounds = bounds; }	//each is expressed as normalised coordinates of the overall map
+		inline void				SetMapBounds(std::vector<Pos3> mapBounds) { m_mapBounds = mapBounds; } //this may be inappropriate to store here
 		inline void				SetCastlePosition(Pos3 castlePosition) { m_castlePosition = castlePosition; }
 		inline void				SetTownPosition(Pos3 townPosition) { m_townPosition = townPosition; }
+
+		//inline void				AddMapBoundary(Pos3 boundaryPosition) { m_mapBounds.push_back(boundaryPosition); } //this is similarly inappropriate
+		inline void				AddLocalBoundary(Pos3 boundaryPosition) { m_bounds.push_back(boundaryPosition); }
+		void					ScaleMapBounds(double xScale, double yScale);
 };
 
 #endif
